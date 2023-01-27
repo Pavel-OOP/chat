@@ -39,3 +39,6 @@ class Account:
     def withdraw(self, amount):
         if amount > 0:
             self.balance -= amount
+
+    def showBalance(self):
+        return "Balance is {}".format(self.balance)

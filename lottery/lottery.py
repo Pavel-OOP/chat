@@ -1,2 +1,0 @@
-class Lottery:
-    pass
