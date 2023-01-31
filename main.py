@@ -8,12 +8,5 @@ test = Account()
 
 test.deposit(100)
 test.withdraw(50)
-print(test.showTransactions())
-    # Use a breakpoint in the code line below to debug your script
+test.showTransactions()
 
-
-# Press the green button in the gutter to run the script.
-
-
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
