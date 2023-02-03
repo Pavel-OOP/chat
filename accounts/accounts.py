@@ -67,4 +67,4 @@ class Account:
                 transType = "deposited"
             else:
                 transType = "withdrawn"
-            print("{:4} are {} on {} [local time: {}] you new Balance is: {}".format(amount, transType, date, Account._currentTime(), bal))
+            print("{:4} are {} on {} [local time: {}] your new Balance is: {}".format(amount, transType, date, Account._currentTime(), bal))
