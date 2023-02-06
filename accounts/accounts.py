@@ -1,6 +1,8 @@
 from typing import Final
 import datetime
 import pytz
+from sqlDB import insertInDatabase
+import bcrypt
 
 
 class Account:
@@ -9,19 +11,21 @@ class Account:
         utcTime = datetime.datetime.utcnow()
         return pytz.utc.localize(utcTime)
 
-    __slots__ = ['_name', 'age', 'email', '__password', "balance", "__transactionList", 'active']
+    __slots__ = ['_name', 'age', 'email', '__password', "balance", "_transactionList", 'active']
 
     attributes: Final[str] = "'name', 'age', 'email', 'password', 'active'"
 
-    def __init__(self, name="str", age="int", email="str", password="str", amount=0):
+    def __init__(self, name, age, email, password, amount=0):
         self.balance = 0
         self._name = name
         self.age = age
         self.email = email
         self.__password = password
         self.balance += amount
-        self.__transactionList = [(self.balance, Account._currentTime(), amount)]
+        self._transactionList = [(self.balance, Account._currentTime(), amount)]
         self.active = True
+        insertInDatabase(name, age, email, password, self.balance, self.active)
+
 
     def getName(self):
         return self._name
@@ -44,16 +48,16 @@ class Account:
     def deposit(self, amount):
         if amount > 0:
             self.balance += amount
-            print(self.showBalance())
-            self.__transactionList.append((self.balance, Account._currentTime(), amount))
+            print(f"Deposited {amount}, new balance:{self.showBalance()}")
+            self._transactionList.append((self.balance, Account._currentTime(), amount))
         else:
             print("Invalid deposit amount")
 
     def withdraw(self, amount):
         if self.balance > amount > 0:
             self.balance -= amount
-            print(f"-{self.showBalance()}")
-            self.__transactionList.append((self.balance, Account._currentTime(), -amount))
+            print(f"Withdrawn -{amount}, new balance:{self.showBalance()}")
+            self._transactionList.append((self.balance, Account._currentTime(), -amount))
         else:
             print("Invalid withdrawal amount, your current balance is: {}".format(self.balance))
 
@@ -62,9 +66,10 @@ class Account:
 
     def showTransactions(self):
         # self.__transactionList.pop()
-        for bal, date, amount in self.__transactionList:
+        for bal, date, amount in self._transactionList:
             if amount > 0:
                 transType = "deposited"
             else:
                 transType = "withdrawn"
-            print("{:4} are {} on {} [local time: {}] your new Balance is: {}".format(amount, transType, date, Account._currentTime(), bal))
+            print("{:4} are {} on {} [local time: {}] your new Balance is: {}".format(amount, transType, date,
+                                                                                      Account._currentTime(), bal))
