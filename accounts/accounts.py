@@ -1,7 +1,8 @@
 from typing import Final
 import datetime
 import pytz
-from .sqlDB import insertInDatabase
+from .sqlDB import insertInDatabase, getTransLog
+from .sqlDB import updateTransLog
 import bcrypt
 
 
@@ -50,6 +51,7 @@ class Account:
             self.balance += amount
             print(f"Deposited {amount}, new balance:{self.showBalance()}")
             self._transactionList.append((self.balance, Account._currentTime(), amount))
+            updateTransLog(self.getEmail(), self._transactionList)
         else:
             print("Invalid deposit amount")
 
@@ -58,6 +60,7 @@ class Account:
             self.balance -= amount
             print(f"Withdrawn -{amount}, new balance:{self.showBalance()}")
             self._transactionList.append((self.balance, Account._currentTime(), -amount))
+            updateTransLog(self.getEmail(), self._transactionList)
         else:
             print("Invalid withdrawal amount, your current balance is: {}".format(self.balance))
 
@@ -66,7 +69,7 @@ class Account:
 
     def showTransactions(self):
         # self.__transactionList.pop()
-        for bal, date, amount in self._transactionList:
+        for bal, date, amount in getTransLog(self.getEmail()):
             if amount > 0:
                 transType = "deposited"
             else:

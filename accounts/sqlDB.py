@@ -10,6 +10,18 @@ db = client["accounts"]
 customers = db["customers"]
 
 
+def getTransLog(email):
+    logQuery = customers.find({"email": email})
+    for x in logQuery:
+        return x.get("transactionLog")
+
+
+def updateTransLog(email, transactionList):
+    transQuery = {"email": email}
+    transQueryNew = {"$set": {"transactionLog": transactionList}}
+    customers.update_one(transQuery, transQueryNew)
+
+
 def insertInDatabase(name, age, email, password, balance, active, transactionList):
     emailQuery = {"email": email}
     emailQueryRes = customers.find(emailQuery)
@@ -17,11 +29,7 @@ def insertInDatabase(name, age, email, password, balance, active, transactionLis
     for x in emailQueryRes:
         if x.get("email") == email:
             check = False
-        elif x.get("name") == name and x.get("age") == age:
-            prompt = input("Are you sure you don't already have an account and you can't find the credentials? y/n:")
-            if prompt == "n":
-                print("Please try to find your email and password!")
-                check = False
+
     if check:
         sPass = hashlib.sha256(password.encode())
         dbInject = {"name": name, "age": age, "email": email, "password": sPass.hexdigest(), "balance": balance,
