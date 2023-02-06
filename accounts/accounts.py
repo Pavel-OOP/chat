@@ -1,7 +1,7 @@
 from typing import Final
 import datetime
 import pytz
-from sqlDB import insertInDatabase
+from .sqlDB import insertInDatabase
 import bcrypt
 
 
@@ -20,12 +20,12 @@ class Account:
         self._name = name
         self.age = age
         self.email = email
-        self.__password = password
+        self.__password = password.encode()
         self.balance += amount
         self._transactionList = [(self.balance, Account._currentTime(), amount)]
         self.active = True
-        insertInDatabase(name, age, email, password, self.balance, self.active)
-
+        insertInDatabase(name, age, email, self.__password, self.balance, self.active, self._transactionList)
+        print(f"Account opened with {amount} added to balance")
 
     def getName(self):
         return self._name
