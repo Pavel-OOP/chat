@@ -20,7 +20,7 @@ class Account:
         self._name = name
         self.age = age
         self.email = email
-        self.__password = password.encode()
+        self.__password = password
         self.balance += amount
         self._transactionList = [(self.balance, Account._currentTime(), amount)]
         self.active = True
