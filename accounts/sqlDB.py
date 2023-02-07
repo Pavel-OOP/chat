@@ -16,6 +16,14 @@ def getTransLog(email):
         return x.get("transactionLog")
 
 
+def login(email, password):
+    emailQuery = customers.find({"email": email})
+    for x in emailQuery:
+        if x.get("password") == hashlib.sha256(password.encode()).hexdigest():
+            return True
+    return False
+
+
 def updateTransLog(email, transactionList):
     transQuery = {"email": email}
     transQueryNew = {"$set": {"transactionLog": transactionList}}

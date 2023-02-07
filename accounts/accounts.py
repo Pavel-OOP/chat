@@ -3,14 +3,24 @@ import datetime
 import pytz
 from .sqlDB import insertInDatabase, getTransLog
 from .sqlDB import updateTransLog
-import bcrypt
+import re
+
+
+def isValidEmail(email):
+    emailRegex = re.compile(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+    return bool(emailRegex.match(email))
+
+
+def validateName(name):
+    nameRegex = re.compile(r"^[A-Za-z]+(([',. -][A-Za-z ])?[A-Za-z]*)*$")
+    return bool(nameRegex.match(name))
 
 
 class Account:
     @staticmethod
     def _currentTime():
         utcTime = datetime.datetime.utcnow()
-        return pytz.utc.localize(utcTime)
+        return str(pytz.utc.localize(utcTime)).split(".")[0]
 
     __slots__ = ['_name', 'age', 'email', '__password', "balance", "_transactionList", 'active']
 
@@ -18,9 +28,15 @@ class Account:
 
     def __init__(self, name, age, email, password, amount=0):
         self.balance = 0
-        self._name = name
+        if validateName(name):
+            self._name = name
+        else:
+            raise Exception("Name is invalid!")
         self.age = age
-        self.email = email
+        if isValidEmail(email):
+            self.email = email
+        else:
+            raise Exception("The email provided is invalid!")
         self.__password = password
         self.balance += amount
         self._transactionList = [(self.balance, Account._currentTime(), amount)]
@@ -68,7 +84,6 @@ class Account:
         return self.balance
 
     def showTransactions(self):
-        # self.__transactionList.pop()
         for bal, date, amount in getTransLog(self.getEmail()):
             if amount > 0:
                 transType = "deposited"
@@ -76,3 +91,4 @@ class Account:
                 transType = "withdrawn"
             print("{:4} are {} on {} [local time: {}] your new Balance is: {}".format(amount, transType, date,
                                                                                       Account._currentTime(), bal))
+
