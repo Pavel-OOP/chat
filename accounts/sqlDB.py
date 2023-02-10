@@ -10,9 +10,15 @@ db = client["accounts"]
 customers = db["customers"]
 
 
+def getUserID(email):
+    emailQuery = customers.find({"email": email})
+    for x in emailQuery:
+        return x.get("_id")
+
+
 def getTransLog(email):
-    logQuery = customers.find({"email": email})
-    for x in logQuery:
+    emailQuery = customers.find({"email": email})
+    for x in emailQuery:
         return x.get("transactionLog")
 
 
