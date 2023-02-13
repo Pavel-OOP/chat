@@ -38,7 +38,7 @@ class Account:
         else:
             raise Exception("The email provided is invalid!")
         self.__password = password
-        self.balance += amount
+        self.balance += int(amount)
         self._transactionList = [(self.balance, Account._currentTime(), amount)]
         self.active = True
         insertInDatabase(name, age, email, self.__password, self.balance, self.active, self._transactionList)
