@@ -9,10 +9,10 @@ client.send(input1.encode())
 
 if input1 == "y":
     email = client.recv(1024).decode()
-    print(f"recv '{email}' at {accounts.Account._currentTime()}")
+    print(f"received '{email}' at {accounts.Account._currentTime()}")
     client.send(input(email).encode())
     password = client.recv(1024).decode()
-    print(f"recv '{password}' at {accounts.Account._currentTime()}")
+    print(f"received '{password}' at {accounts.Account._currentTime()}")
     client.send(input(password).encode())
     print(client.recv(1024).decode())
     client.close()
@@ -22,3 +22,4 @@ else:
     client.send(input("Email: ").encode())
     client.send(input("Password: ").encode())
     client.send(input("Amount to deposit: ").encode())
+    client.close()

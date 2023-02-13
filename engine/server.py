@@ -15,10 +15,10 @@ def handleConnection(c):
     if loginOrRegister == "y":
         c.send("Email: ".encode())
         email = c.recv(1024).decode()
-        print(f"email recv - '{email}' at {accounts.Account._currentTime()}")
+        print(f"email received - '{email}' at {accounts.Account._currentTime()}")
         c.send("Password: ".encode())
         password = c.recv(1024).decode()
-        print(f"password recv - '{password}' at {accounts.Account._currentTime()}")
+        print(f"password received  - '{password}' at {accounts.Account._currentTime()}")
         if sqlDB.login(email, password):
             c.send("Login successful!".encode())
             print(c.recv(1024).decode())
@@ -31,7 +31,6 @@ def handleConnection(c):
         password = c.recv(1024).decode()
         amount = c.recv(1024).decode()
         accounts.Account(name, age, email, password, amount)
-
 
 
 while True:
