@@ -25,7 +25,7 @@ def getTransLog(email):
 def login(email, password):
     emailQuery = customers.find({"email": email})
     for x in emailQuery:
-        if x.get("password") == hashlib.sha256(password.encode()).hexdigest():
+        if x.get("password") == hashlib.sha256((x.get("name")+password).encode()).hexdigest():
             return True
     return False
 
@@ -45,7 +45,7 @@ def insertInDatabase(name, age, email, password, balance, active, transactionLis
             check = False
 
     if check:
-        sPass = hashlib.sha256(password.encode())
+        sPass = hashlib.sha256((name+password).encode())
         dbInject = {"name": name, "age": age, "email": email, "password": sPass.hexdigest(), "balance": balance,
                     "active": active,
                     "transactionLog": transactionList}
