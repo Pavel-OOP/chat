@@ -2,7 +2,7 @@ import socket
 import threading
 from accounts import sqlDB
 from accounts import accounts
-import hashlib
+
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(("localhost", 9999))
