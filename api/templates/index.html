@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="static/styles.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.js"></script>
     <script type="text/javascript">
@@ -11,22 +12,41 @@
             socket.on('connect', function(){
                 socket.send("User connected!");
             });
-    
+
             socket.on('message', function(data) {
-                $('#messages').append($('<p>').text(data));
+                $('.messages').append($('<p>').text(data));
             });
-    
+
             $('#sendBtn').on('click', function() {
-                socket.send($('#username').val() + ': '+ $('#message').val());
+                socket.send($('.username').val() + ': '+ $('#message').val());
                 $('#message').val('');
             });
         });
     </script>
 </head>
-<body>
-<div id="messages"></div>
-<input type="text" id="username" placeholder="Username">
-<input type="text" id="message" placeholder="Message">
-<button id="sendBtn">Send</button>
-</body>
+  <body>
+    <div class="container">
+      <div class="chat">
+        <div class="chat-header">
+          <h2>Chat App</h2>
+        </div>
+        <div class="chat-body">
+          <ul class="messages">
+            <li class="message">
+              <span class="username">John:</span>
+              <span class="text">Hello World!</span>
+            </li>
+            <li class="message">
+              <span class="username">Sarah:</span>
+              <span class="text">Hi there!</span>
+            </li>
+          </ul>
+        </div>
+        <div class="chat-footer">
+          <input id="message" type="text" placeholder="Type your message here...">
+          <button id="sendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
