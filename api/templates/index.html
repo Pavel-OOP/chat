@@ -18,8 +18,9 @@
             });
 
             $('#sendBtn').on('click', function() {
-                socket.send($('.username').val() + ': '+ $('#message').val());
+                socket.send($('#username').val() + ': '+ $('#message').val());
                 $('#message').val('');
+                $('#username').val('');
             });
         });
     </script>
@@ -32,17 +33,11 @@
         </div>
         <div class="chat-body">
           <ul class="messages">
-            <li class="message">
-              <span class="username">John:</span>
-              <span class="text">Hello World!</span>
-            </li>
-            <li class="message">
-              <span class="username">Sarah:</span>
-              <span class="text">Hi there!</span>
-            </li>
+
           </ul>
         </div>
         <div class="chat-footer">
+          <input id="username" type="text" placeholder="Type your name here...">
           <input id="message" type="text" placeholder="Type your message here...">
           <button id="sendBtn">Send</button>
         </div>
