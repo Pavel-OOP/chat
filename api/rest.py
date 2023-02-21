@@ -13,6 +13,11 @@ def handleMessage(message):
         send(message, broadcast=True)
 
 
+@app.route('/form')
+def form():
+    return render_template("form.html")
+
+
 @app.route('/')
 def index():
     return render_template("index.html")
