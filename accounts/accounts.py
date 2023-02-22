@@ -4,6 +4,7 @@ import pytz
 from .sqlDB import insertInDatabase, getTransLog
 from .sqlDB import updateTransLog
 import re
+import asyncio
 
 
 def isValidEmail(email):
@@ -14,6 +15,10 @@ def isValidEmail(email):
 def validateName(name):
     nameRegex = re.compile(r"^[A-Za-z]+(([',. -][A-Za-z ])?[A-Za-z]*)*$")
     return bool(nameRegex.match(name))
+
+
+def isActive(active):
+    return active
 
 
 class Account:
@@ -40,8 +45,10 @@ class Account:
         self.__password = password
         self.balance += int(amount)
         self._transactionList = [(self.balance, Account._currentTime(), amount)]
-        self.active = True
-        insertInDatabase(name, age, email, self.__password, self.balance, self.active, self._transactionList)
+        self.active = bool(insertInDatabase(name, age, email, self.__password, self.balance,
+                                            self._transactionList))
+        insertInDatabase(name, age, email, self.__password, self.balance,
+                         self._transactionList)
         print(f"Account opened with {amount} added to balance")
 
     def getName(self):
@@ -55,6 +62,9 @@ class Account:
 
     def getBalance(self):
         return self.balance
+
+    def isActive(self):
+        return self.active
 
     def switchToEnabledOrDisabled(self):
         if self.active:
@@ -91,4 +101,3 @@ class Account:
                 transType = "withdrawn"
             print("{:4} are {} on {} [local time: {}] your new Balance is: {}".format(amount, transType, date,
                                                                                       Account._currentTime(), bal))
-

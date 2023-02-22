@@ -3,6 +3,8 @@
 <head>
 	<title>Registration Form</title>
 	<link rel="stylesheet" type="text/css" href="static/style1.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -15,10 +17,10 @@
 			<input type="email" id="email" required>
 
 			<label for="age">Age:</label>
-			<input type="age" id="age" required>
+			<input type="number" id="age" required>
 
 			<label for="amount">Amount:</label>
-			<input type="amount" id="amount" required>
+			<input type="number" id="amount" required>
 
 			<label for="password">Password:</label>
 			<input type="password" id="password" required>
@@ -28,24 +30,44 @@
 	</div>
 
 	<script type="text/javascript">
-          const form = document.querySelector('form');
+        const form = document.querySelector('form');
 		$(document).ready(function() {
-            var socket = io.connect("http://localhost:9999")
-            socket.on('connect', function(){
-                socket.send("User connected!");
-            });
+			console.log('JQuery Fired')
 
           form.addEventListener('submit', (event) => {
             event.preventDefault();
+			var formData = {
+				name: $('#name').val(),
+				email: $('#email').val(),
+				age: $('#age').val(),
+				amount: $('#amount').val(),
+				password: $('#password').val()
+			}
+			
+			$.ajax({
+				type: 'POST',
+				url: '/api/register',
+				data: JSON.stringify(formData),
+				contentType: 'application/json',
+				success: function(response){
+					console.log('Success', response);
+				},
+				error: function(error) {
+					console.error('Error:', error)
+				}
+			})
 
-            const name = document.querySelector('#name').value;
-            const email = document.querySelector('#email').value;
-            const age = document.querySelector('#age').value;
-            const amount = document.querySelector('#amount').value;
-            const password = document.querySelector('#password').value;
 
-			socket.send();
+            $('#name').val('')
+            $('#email').val('')
+            $('#age').val('')
+            $('#amount').val('')
+            $('#password').val('')
           });
+
+
+		});
+
     </script>
 </body>
 </html>

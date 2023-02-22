@@ -36,7 +36,7 @@ def updateTransLog(email, transactionList):
     customers.update_one(transQuery, transQueryNew)
 
 
-def insertInDatabase(name, age, email, password, balance, active, transactionList):
+def insertInDatabase(name, age, email, password, balance, transactionList):
     emailQuery = {"email": email}
     emailQueryRes = customers.find(emailQuery)
     check = True
@@ -47,8 +47,10 @@ def insertInDatabase(name, age, email, password, balance, active, transactionLis
     if check:
         sPass = hashlib.sha256((name+password).encode())
         dbInject = {"name": name, "age": age, "email": email, "password": sPass.hexdigest(), "balance": balance,
-                    "active": active,
+                    "active": True,
                     "transactionLog": transactionList}
         customers.insert_one(dbInject)
+        return True
     else:
         print("Cannot create account, user already exists")
+        return False
