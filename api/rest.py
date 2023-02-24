@@ -3,6 +3,7 @@ from flask_restful import Resource, Api
 from flask_socketio import SocketIO, send
 from flask import request
 from accounts import accounts
+from accounts import sqlDB
 
 app = Flask("LotteryAPI")
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -18,12 +19,11 @@ def handleMessage(message):
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.json
-
     email = data['email']
     password = data['password']
+    result = sqlDB.login(email, password)
 
-    print(email + " " + password)
-    return jsonify({'success': 100})
+    return jsonify({'success': str(result)})
 
 
 @app.route('/api/register', methods=['POST'])
@@ -36,10 +36,10 @@ def register():
     amount = data['amount']
     password = data['password']
 
-    acc = accounts.Account(name, age, email, password, amount)
-    print(acc.isActive())
+    result = accounts.Account(name, age, email, password, amount)
+    print(result.isActive())
     # Return a response to the client
-    return jsonify({'success': str(acc.isActive())})
+    return jsonify({'success': str(result.isActive())})
 
 
 @app.route('/login')
