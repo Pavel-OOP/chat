@@ -15,6 +15,17 @@ def handleMessage(message):
         send(message, broadcast=True)
 
 
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.json
+
+    email = data['email']
+    password = data['password']
+
+    print(email + " " + password)
+    return jsonify({'success': 100})
+
+
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.json
@@ -29,6 +40,11 @@ def register():
     print(acc.isActive())
     # Return a response to the client
     return jsonify({'success': str(acc.isActive())})
+
+
+@app.route('/login')
+def loginPage():
+    return render_template("login.html")
 
 
 @app.route('/form')
