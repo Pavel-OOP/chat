@@ -22,8 +22,15 @@ def login():
     email = data['email']
     password = data['password']
     result = sqlDB.login(email, password)
+    ids = sqlDB.getUserID(email)
+    if ids:
+        return logged(ids)
 
     return jsonify({'success': str(result)})
+
+
+def logged(ids):
+    return f"The id of user is {ids}"
 
 
 @app.route('/api/register', methods=['POST'])
