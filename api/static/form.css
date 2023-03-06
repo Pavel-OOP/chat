@@ -65,3 +65,21 @@ button:hover {
   cursor: pointer; /* Change cursor on hover */
   border-radius: 8px; /* Add rounded corners to button */
   }
+
+.redirect-btn2 {
+  position: flex;
+  top: 15%;
+  left:44.7%;
+  width:10%;
+  background-color: #4CAF50; /* Green background color */
+  border: none; /* Remove button border */
+  color: white; /* Text color */
+  padding: 12px 2px; /* Padding for button text */
+  text-align: center; /* Center button text */
+  text-decoration: none; /* Remove underline on button */
+  display: inline-block; /* Display as inline block element */
+  font-size: 16px; /* Font size for button text */
+  margin: 4px 2px; /* Add margin to button */
+  cursor: pointer; /* Change cursor on hover */
+  border-radius: 8px; /* Add rounded corners to button */
+  }
