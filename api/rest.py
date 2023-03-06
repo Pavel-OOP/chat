@@ -1,12 +1,21 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, redirect, url_for
 from flask_restful import Resource, Api
 from flask_socketio import SocketIO, send
 from flask import request
 from accounts import accounts
 from accounts import sqlDB
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 
-app = Flask("LotteryAPI")
+app = Flask("Chat")
+loginManager = LoginManager()
+loginManager.init_app(app)
+loginManager.login_view = 'login'
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+
+@loginManager.user_loader
+def loadUser(userID):
+    return sqlDB.customers.find({'_id': userID})
 
 
 @socketio.on('message')
@@ -16,21 +25,17 @@ def handleMessage(message):
         send(message, broadcast=True)
 
 
-@app.route('/api/login', methods=['POST'])
+@app.route('/api/login', methods=['GET', 'POST'])
 def login():
     data = request.json
+
     email = data['email']
     password = data['password']
     result = sqlDB.login(email, password)
-    ids = sqlDB.getUserID(email)
-    if ids:
-        return logged(ids)
+    if result:  # todo
+        return redirect(url_for('index', email=email))
 
     return jsonify({'success': str(result)})
-
-
-def logged(ids):
-    return f"The id of user is {ids}"
 
 
 @app.route('/api/register', methods=['POST'])

@@ -29,7 +29,7 @@ class Account:
 
     __slots__ = ['_name', 'age', 'email', '__password', "balance", "_transactionList", 'active']
 
-    attributes: Final[str] = "'name', 'age', 'email', 'password', 'active'"
+    attributes: Final[str] = "'name', 'age', 'email', 'password'"
 
     def __init__(self, name, age, email, password, amount=0):
         self.balance = 0

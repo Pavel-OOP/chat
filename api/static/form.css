@@ -49,7 +49,7 @@ button:hover {
 }
 
 .redirect-btn {
-  position: absolute;
+  position: flex;
   top: 5%;
   left:44.7%;
   width:10%;
@@ -67,7 +67,7 @@ button:hover {
   }
 #empty {
   position:flex;
-  margin: 3%;
+  margin: 2.5%;
 }
 .redirect-btn2 {
   position: flex;
