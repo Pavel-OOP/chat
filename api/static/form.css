@@ -65,7 +65,10 @@ button:hover {
   cursor: pointer; /* Change cursor on hover */
   border-radius: 8px; /* Add rounded corners to button */
   }
-
+#empty {
+  position:flex;
+  margin: 3%;
+}
 .redirect-btn2 {
   position: flex;
   top: 15%;
