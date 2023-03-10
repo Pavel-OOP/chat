@@ -10,6 +10,7 @@ app = Flask("Chat")
 loginManager = LoginManager()
 loginManager.init_app(app)
 loginManager.login_view = 'login'
+api = Api(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 
@@ -32,10 +33,18 @@ def login():
     email = data['email']
     password = data['password']
     result = sqlDB.login(email, password)
+    ids = sqlDB.getUserID(email)
     if result:  # todo
-        return redirect(url_for('index', email=email))
+        return redirect(url_for('logged', id=ids))
 
     return jsonify({'success': str(result)})
+
+
+@app.route('/<id>', methods=['GET', 'POST'])
+def logged():
+    if request.method == 'POST':
+        result = request.form
+        return render_template("index.html", result=result)
 
 
 @app.route('/api/register', methods=['POST'])
@@ -70,4 +79,4 @@ def index():
 
 
 if __name__ == "__main__":
-    socketio.run(app, allow_unsafe_werkzeug=True, host="localhost", port=5000)
+    socketio.run(app, debug=True, allow_unsafe_werkzeug=True, host="localhost", port=5000)
