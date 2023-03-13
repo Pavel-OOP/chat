@@ -33,11 +33,10 @@ def login():
     email = data['email']
     password = data['password']
     result = sqlDB.login(email, password)
-    ids = sqlDB.getUserID(email)
-    if result:  # todo
-        return redirect(url_for('logged', id=ids))
+    sqlDB.switchActive(email, bool(result))
+    name = sqlDB.getUserName(email)
 
-    return jsonify({'success': str(result)})
+    return index(name, result)
 
 
 @app.route('/<id>', methods=['GET', 'POST'])
@@ -74,8 +73,11 @@ def form():
 
 
 @app.route('/')
-def index():
-    return render_template("index.html")
+def index(name, active=False):
+    if not active:
+        return render_template("index.html", name="Guest")
+    else:
+        return render_template("index.html", name=name)
 
 
 if __name__ == "__main__":

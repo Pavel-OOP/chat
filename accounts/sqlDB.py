@@ -16,6 +16,19 @@ def getUserID(email):
         return x.get("_id")
 
 
+def getUserName(email):
+    emailQuery = customers.find({"email": email})
+    for x in emailQuery:
+        return x.get("name")
+
+
+def switchActive(email, active):
+    emailQuery = {"email": email}
+    newValues = {"$set": {"active": active}}
+    customers.update_one(emailQuery, newValues)
+    return active
+
+
 def getTransLog(email):
     emailQuery = customers.find({"email": email})
     for x in emailQuery:
@@ -25,7 +38,7 @@ def getTransLog(email):
 def login(email, password):
     emailQuery = customers.find({"email": email})
     for x in emailQuery:
-        if x.get("password") == hashlib.sha256((x.get("name")+password).encode()).hexdigest():
+        if x.get("password") == hashlib.sha256((x.get("name") + password).encode()).hexdigest():
             return True
     return False
 
@@ -45,7 +58,7 @@ def insertInDatabase(name, age, email, password, balance, transactionList):
             check = False
 
     if check:
-        sPass = hashlib.sha256((name+password).encode())
+        sPass = hashlib.sha256((name + password).encode())
         dbInject = {"name": name, "age": age, "email": email, "password": sPass.hexdigest(), "balance": balance,
                     "active": True,
                     "transactionLog": transactionList}

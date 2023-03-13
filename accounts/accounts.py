@@ -17,8 +17,7 @@ def validateName(name):
     return bool(nameRegex.match(name))
 
 
-def isActive(active):
-    return active
+
 
 
 class Account:
