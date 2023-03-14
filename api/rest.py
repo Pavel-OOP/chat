@@ -39,10 +39,11 @@ def login():
     return index(name, result)
 
 
-@app.route('/<id>', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def logged():
     if request.method == 'POST':
         result = request.form
+        print(result)
         return render_template("index.html", result=result)
 
 
@@ -73,7 +74,7 @@ def form():
 
 
 @app.route('/')
-def index(name, active=False):
+def index(name="Guest", active=False):
     if not active:
         return render_template("index.html", name="Guest")
     else:
