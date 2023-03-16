@@ -35,9 +35,7 @@ def login():
     result = sqlDB.login(email, password)
     sqlDB.switchActive(email, bool(result))
     name = sqlDB.getUserName(email)
-    # todo
-    can="i"
-    incorporate="AI?"
+
     return index(name, result)
 
 

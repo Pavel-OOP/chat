@@ -2,9 +2,10 @@ import pymongo
 from pymongo import MongoClient
 import bcrypt
 import hashlib
+import passwordz
 
-client = MongoClient('mongodb://localhost:27017/')
-# client = mongodb+srv://Pavkata7000:<password>@cluster0.hhmhz.mongodb.net/?retryWrites=true&w=majority
+# client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient(f'mongodb+srv://Pavkata7000:{passwordz.password}@cluster0.hhmhz.mongodb.net/?retryWrites=true&w=majority')
 
 db = client["accounts"]
 customers = db["customers"]
