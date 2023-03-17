@@ -1,4 +1,5 @@
-from flask import Flask, render_template, jsonify, redirect, url_for
+import re
+from flask import Flask, render_template, jsonify, redirect, url_for, render_template_string
 from flask_restful import Resource, Api
 from flask_socketio import SocketIO, send
 from flask import request
@@ -43,20 +44,21 @@ def login():
         return jsonify({'redirect': url_for('index')})
 
 
-# @app.route('/', methods=['GET', 'POST'])
-# def logged():
-#     if request.method == 'POST':
-#         result = request.form
-#         print(result)
-#         return render_template("index.html", result=result)
+def check(email):
+    regex = '^[a-zA-Z0-9]{3,}[-]?\@[a-zA-Z0-9]{3,}[-]?\.[a-zA-Z]{2,}$'
+    if re.search(regex, email):
+        return True
+    else:
+        return False
 
 
-@app.route('/api/register', methods=['POST'])
+@app.route('/api/register', methods=['POST', 'GET'])
 def register():
     data = request.json
 
     name = data['name']
     email = data['email']
+    check(email)
     age = data['age']
     amount = data['amount']
     password = data['password']

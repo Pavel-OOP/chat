@@ -8,7 +8,7 @@ import asyncio
 
 
 def isValidEmail(email):
-    emailRegex = re.compile(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+    emailRegex = re.compile(r'^[a-zA-Z0-9]{3,}[-]?\@[a-zA-Z0-9]{3,}[-]?\.[a-zA-Z]{2,}$')
     return bool(emailRegex.match(email))
 
 
