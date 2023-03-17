@@ -35,16 +35,20 @@ def login():
     result = sqlDB.login(email, password)
     sqlDB.switchActive(email, bool(result))
     name = sqlDB.getUserName(email)
+    print(result)
+    print(name)
+    if result:
+        return jsonify({'redirect': url_for('index1', name=name)})
+    else:
+        return jsonify({'redirect': url_for('index')})
 
-    return index(name, result)
 
-
-@app.route('/', methods=['GET', 'POST'])
-def logged():
-    if request.method == 'POST':
-        result = request.form
-        print(result)
-        return render_template("index.html", result=result)
+# @app.route('/', methods=['GET', 'POST'])
+# def logged():
+#     if request.method == 'POST':
+#         result = request.form
+#         print(result)
+#         return render_template("index.html", result=result)
 
 
 @app.route('/api/register', methods=['POST'])
@@ -73,12 +77,14 @@ def form():
     return render_template("form.html")
 
 
+@app.route('/<name>')
+def index1(name):
+    return render_template("index.html", name=name)
+
+
 @app.route('/')
-def index(name="Guest", active=False):
-    if not active:
-        return render_template("index.html", name="Guest")
-    else:
-        return render_template("index.html", name=name)
+def index():
+    return render_template("index.html", name="Guest")
 
 
 if __name__ == "__main__":

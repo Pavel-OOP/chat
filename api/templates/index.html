@@ -17,8 +17,12 @@
                 $('.messages').append($('<p>').text(data));
             });
 
+            const p = document.getElementById("username");
+            const placeholder = p.innerText;
+            console.log(placeholder);
+
             $('#sendBtn').on('click', function() {
-                socket.send($('#username').val() + ': '+ $('#message').val());
+                socket.send(placeholder + ': '+ $('#message').val());
                 $('#message').val('');
             });
         });
@@ -38,7 +42,7 @@
           </ul>
         </div>
         <div class="chat-footer">
-          <input id="username" type="text" placeholder={{name}}>
+          <p id="username">{{name}}</p>
           <input id="message" type="text" placeholder="Type your message here...">
           <button id="sendBtn">Send</button>
         </div>
