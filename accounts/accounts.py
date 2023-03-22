@@ -17,9 +17,6 @@ def validateName(name):
     return bool(nameRegex.match(name))
 
 
-
-
-
 class Account:
     @staticmethod
     def _currentTime():

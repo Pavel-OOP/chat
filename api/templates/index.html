@@ -20,6 +20,7 @@
 
             const p = document.getElementById("username");
             const placeholder = p.innerText;
+            console.log(placeholder)
 
             $('#sendBtn').on('click', function() {
                 socket.send(placeholder + ': '+ $('#message').val());

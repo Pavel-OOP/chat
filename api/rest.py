@@ -6,6 +6,7 @@ from flask import request
 from accounts import accounts
 from accounts import sqlDB
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
+import asyncio
 
 app = Flask("Chat")
 loginManager = LoginManager()
@@ -36,10 +37,11 @@ def login():
     result = sqlDB.login(email, password)
     sqlDB.switchActive(email, bool(result))
     name = sqlDB.getUserName(email)
+    ids = sqlDB.getUserID(email)
     print(result)
     print(name)
     if result:
-        return jsonify({'redirect': url_for('index1', name=name)})
+        return jsonify({'redirect': url_for('index1', ids=ids)})
     else:
         return jsonify({'redirect': url_for('index')})
 
@@ -58,15 +60,15 @@ def register():
 
     name = data['name']
     email = data['email']
-    check(email)
+    checks = check(email)
     age = data['age']
     amount = data['amount']
     password = data['password']
-
-    result = accounts.Account(name, age, email, password, amount)
-    print(result.isActive())
-    # Return a response to the client
-    return jsonify({'success': str(result.isActive())})
+    if checks:
+        result = accounts.Account(name, age, email, password, amount)
+        return jsonify({'success': str(result.isActive())})
+    else:
+        return jsonify({'success': False})
 
 
 @app.route('/login')
@@ -79,8 +81,9 @@ def form():
     return render_template("form.html")
 
 
-@app.route('/<name>')
-def index1(name):
+@app.route('/<ids>')
+def index1(ids):
+    name = sqlDB.getUserName2(ids)
     return render_template("index.html", name=name)
 
 
