@@ -42,9 +42,10 @@ def login():
     result = sqlDB.login(email, password)
     sqlDB.switchActive(email, bool(result))
     ids = sqlDB.getUserID(email)
+    idsEncr = fernet.encrypt(str(ids).encode())
 
     if result:
-        return jsonify({'redirect': url_for('index1', ids=ids)})
+        return jsonify({'redirect': url_for('index1', ids=idsEncr)})
     else:
         return jsonify({'redirect': url_for('index')})
 
@@ -86,7 +87,10 @@ def form():
 
 @app.route('/<ids>')
 def index1(ids):
-    name = sqlDB.getUserName2(ids)
+    ids2 = fernet.decrypt(ids)
+    ids2 = ids2.decode()
+    ids2 = ObjectId(ids2)
+    name = sqlDB.getUserName2(ids2)
     return render_template("index.html", name=name)
 
 
