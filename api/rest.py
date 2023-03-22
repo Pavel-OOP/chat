@@ -1,4 +1,6 @@
 import re
+
+from bson import ObjectId
 from flask import Flask, render_template, jsonify, redirect, url_for, render_template_string
 from flask_restful import Resource, Api
 from flask_socketio import SocketIO, send
@@ -6,7 +8,7 @@ from flask import request
 from accounts import accounts
 from accounts import sqlDB
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
-import asyncio
+from cryptography.fernet import Fernet
 
 app = Flask("Chat")
 loginManager = LoginManager()
@@ -15,10 +17,13 @@ loginManager.login_view = 'login'
 api = Api(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+key = Fernet.generate_key()
+fernet = Fernet(key)
+
 
 @loginManager.user_loader
 def loadUser(userID):
-    return sqlDB.customers.find({'_id': userID})
+    return sqlDB.customers.find({'_id': ObjectId(userID)})
 
 
 @socketio.on('message')
@@ -36,10 +41,8 @@ def login():
     password = data['password']
     result = sqlDB.login(email, password)
     sqlDB.switchActive(email, bool(result))
-    name = sqlDB.getUserName(email)
     ids = sqlDB.getUserID(email)
-    print(result)
-    print(name)
+
     if result:
         return jsonify({'redirect': url_for('index1', ids=ids)})
     else:
@@ -65,8 +68,8 @@ def register():
     amount = data['amount']
     password = data['password']
     if checks:
-        result = accounts.Account(name, age, email, password, amount)
-        return jsonify({'success': str(result.isActive())})
+        accounts.Account(name, age, email, password, amount)
+        return jsonify({'success': True})
     else:
         return jsonify({'success': False})
 

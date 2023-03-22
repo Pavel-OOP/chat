@@ -57,7 +57,12 @@
 				data: JSON.stringify(formData),
 				contentType: 'application/json',
 				success: function(response){
-					console.log('Success', response);
+
+					if(!response.success){
+						alert('Credentials are invalid, please try again!')
+					}else{
+						alert("You have registered successfully!")
+					}
 				},
 				error: function(error) {
 					console.error('Error:', error)
