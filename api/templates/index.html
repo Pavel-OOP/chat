@@ -13,14 +13,25 @@
                 socket.send("User connected!");
             });
             
-
-            socket.on('message', function(data) {
-                $('.messages').append($('<p>').text(data));
-            });
-
             const p = document.getElementById("username");
             const placeholder = p.innerText;
             console.log(placeholder)
+
+            socket.on('message', function(data) {
+                $('.messages').append($('<p>').text(data));
+                  localStorage.setItem('chat', data)
+            });
+            // localStorage.removeItem(key)
+            if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+              Object.keys(localStorage).forEach(function(key) {
+               const value = localStorage.getItem(key);
+                console.log(value.length)
+                if (key == 'chat'){
+                  socket.send(value)
+                }
+              });
+            };
+            
 
             $('#sendBtn').on('click', function() {
                 socket.send(placeholder + ': '+ $('#message').val());
