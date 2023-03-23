@@ -15,19 +15,22 @@
             
             const p = document.getElementById("username");
             const placeholder = p.innerText;
-            console.log(placeholder)
-
+            var counter = localStorage.length;
             socket.on('message', function(data) {
                 $('.messages').append($('<p>').text(data));
-                  localStorage.setItem('chat', data)
+                if ((data[1]+data[2]+data[3]+data[4]) != '"v":'){
+                  localStorage.setItem(counter++, data)
+                }
             });
-            // localStorage.removeItem(key)
+
+            
             if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+
               Object.keys(localStorage).forEach(function(key) {
-               const value = localStorage.getItem(key);
-                console.log(value.length)
-                if (key == 'chat'){
-                  socket.send(value)
+                const value = localStorage.getItem(key);
+                //localStorage.removeItem(key)
+                if ((value[1]+value[2]+value[3]+value[4]) != '"v":'){
+                  $('.messages').append($('<p>').text(value));
                 }
               });
             };
