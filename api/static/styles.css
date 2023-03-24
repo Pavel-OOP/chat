@@ -1,6 +1,7 @@
 .container {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -9,6 +10,8 @@
 
 .chat {
   position: absolute;
+  display: flex;
+  flex-direction: column;
   height: 70%;
   width: 500px;
   background-color: white;
